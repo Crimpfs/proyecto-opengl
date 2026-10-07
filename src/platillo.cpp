@@ -18,15 +18,14 @@ void graficarPlatillo(){
     glColor3f(0.0, 0.6, 0.0); 
     glPushMatrix();
     glRotatef(anguloRotacion, 0.0, 1.0, 0.0);
-    glScalef(1.0, 0.2, 1.0); // Aplanado en el eje Y
+    glScalef(1.0, 0.2, 1.0); 
     glutWireSphere(10.0, 50, 50);
     glPopMatrix();
 
     // Cabina  
     glColor3f(0.0, 0.6, 1.0); 
     glPushMatrix();
-    
-    glTranslatef(0.0, 1.5, 0.0); // Subir la cabina en Y
+    glTranslatef(0.0, 1.5, 0.0);
     glutWireSphere(4.0, 40, 40);
     glPopMatrix();
     

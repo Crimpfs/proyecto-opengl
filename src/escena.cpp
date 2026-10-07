@@ -72,6 +72,69 @@ void graficarCajas() {
     glPopMatrix();
 }
 
+void graficarHUD() {
+    if (vistaActual != 2) return; // Dibujar solo en la cámara 2
+
+    // Cambiar a proyección ortográfica 2D
+    glMatrixMode(GL_PROJECTION);
+    glPushMatrix();
+    glLoadIdentity();
+    gluOrtho2D(0.0, 100.0, 0.0, 100.0); // Lienzo 2D de 100x100
+    
+    glMatrixMode(GL_MODELVIEW);
+    glPushMatrix();
+    glLoadIdentity();
+
+    // Desactivar profundidad para dibujar por encima de todo
+    glDisable(GL_DEPTH_TEST);
+
+    // --- Dibujar el recuadro (Cabina de la nave) ---
+    glColor3f(0.5, 0.5, 0.5); // Color gris metálico
+    glLineWidth(10.0);
+    glBegin(GL_LINE_LOOP);
+        glVertex2f(5.0, 5.0);
+        glVertex2f(95.0, 5.0);
+        glVertex2f(95.0, 95.0);
+        glVertex2f(5.0, 95.0);
+    glEnd();
+
+    // Líneas diagonales para dar efecto 3D a la ventana
+    glLineWidth(4.0);
+    glBegin(GL_LINES);
+        glVertex2f(0.0, 0.0); glVertex2f(5.0, 5.0);
+        glVertex2f(100.0, 0.0); glVertex2f(95.0, 5.0);
+        glVertex2f(100.0, 100.0); glVertex2f(95.0, 95.0);
+        glVertex2f(0.0, 100.0); glVertex2f(5.0, 95.0);
+    glEnd();
+
+    // --- Dibujar el puntero (mira) ---
+    glColor3f(0.0, 1.0, 0.0); // Puntero verde
+    glLineWidth(2.0);
+    glBegin(GL_LINES);
+        // Cruz horizontal
+        glVertex2f(48.0, 50.0);
+        glVertex2f(52.0, 50.0);
+        // Cruz vertical
+        glVertex2f(50.0, 48.0);
+        glVertex2f(50.0, 52.0);
+    glEnd();
+    
+    // Un puntito central para mayor precisión
+    glPointSize(3.0);
+    glBegin(GL_POINTS);
+        glVertex2f(50.0, 50.0);
+    glEnd();
+
+    // Restaurar la configuración 3D normal
+    glEnable(GL_DEPTH_TEST);
+    glLineWidth(1.0);
+
+    glPopMatrix(); 
+    glMatrixMode(GL_PROJECTION);
+    glPopMatrix(); 
+    glMatrixMode(GL_MODELVIEW);
+}
+
 void graficar(){
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glMatrixMode(GL_MODELVIEW);
@@ -89,6 +152,8 @@ void graficar(){
     glScalef(0.5, 0.5, 0.5);
     graficarPlatillo(); 
     glPopMatrix();
+    
+    graficarHUD(); 
     
     glutSwapBuffers();
 }

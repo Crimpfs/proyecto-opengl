@@ -13,10 +13,10 @@ int main(int argc, char **argv) {
 
   inicializar();
 
-    glutDisplayFunc(graficar);
-    glutReshapeFunc(redimensionar);
-    glutKeyboardFunc(teclasNormales);
-    glutIdleFunc(animacion);
+  glutDisplayFunc(graficar);
+  glutReshapeFunc(redimensionar);
+  glutKeyboardFunc(teclasNormales);
+  glutIdleFunc(animacion);
 
   glutMainLoop();
 
