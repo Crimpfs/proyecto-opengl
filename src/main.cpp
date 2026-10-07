@@ -16,8 +16,7 @@ int main(int argc, char **argv) {
   glutDisplayFunc(graficar);
   glutReshapeFunc(redimensionar);
   glutKeyboardFunc(teclasNormales);
-  glutIdleFunc(animacion);
-
+  glutTimerFunc(16, rotarPlatillo, 0);  
   glutMainLoop();
 
   return 0;
