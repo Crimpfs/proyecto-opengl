@@ -1,5 +1,4 @@
 #include "camara.h"
-#include "platillo.h"
 #include <GL/glut.h>
 
 int vistaActual = 1;
