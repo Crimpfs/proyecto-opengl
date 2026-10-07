@@ -3,6 +3,7 @@
 
 #include <string>
 
+<<<<<<< HEAD
 // Declaración de la Clase Platillo
 class Platillo {
 private:
@@ -43,5 +44,20 @@ extern Platillo miNave;
 void animacionNave();
 
 #endif
+=======
+void graficarPlatillo();
+void rotarPlatillo(int valor);
+
+extern float theta;
+extern float radio;
+extern float altura;
+
+extern float posicionBaseX;
+extern float posicionBaseY;
+extern float posicionBaseZ;
+
+extern float posicionTrayectoriaX;
+extern float posicionTrayectoriaZ;
+>>>>>>> abcde66da20f22b84cb76318df36ac68cf896ce5
 
 #endif
