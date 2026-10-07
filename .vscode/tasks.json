@@ -1,0 +1,62 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "type": "cppbuild",
+            "label": "C/C++: g++.exe build active file",
+            "command": "C:\\msys64\\ucrt64\\bin\\g++.exe",
+            "args": [
+                "-Wall",
+                "-Wextra",
+                "-g3",
+                "-I",
+                "${workspaceFolder}/include",
+                "-I",
+                "C:/msys64/ucrt64/include",
+                "-finput-charset=UTF-8",
+                "-fexec-charset=UTF-8",
+                "${workspaceFolder}/src/main.cpp",
+                "${workspaceFolder}/src/escena.cpp",
+                "${workspaceFolder}/src/platillo.cpp",
+                "${workspaceFolder}/src/input.cpp",
+                "${workspaceFolder}/src/camara.cpp",
+                "-o",
+                "${workspaceFolder}/output/src/main.exe",
+                "-L${workspaceFolder}/lib",
+                "-lfreeglut",
+                "-lopengl32",
+                "-lglu32"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "detail": "Tarea modificada para compilar todo el proyecto OpenGL."
+        },
+        {
+            "label": "CMake: Compilar y Ejecutar",
+            "type": "shell",
+            "command": "cmd",
+            "args": [
+                "/c",
+                "C:\\msys64\\ucrt64\\bin\\cmake.exe -B build -G \"MinGW Makefiles\" -DCMAKE_C_COMPILER=C:/msys64/ucrt64/bin/gcc.exe -DCMAKE_CXX_COMPILER=C:/msys64/ucrt64/bin/g++.exe -DCMAKE_EXPORT_COMPILE_COMMANDS=ON && C:\\msys64\\ucrt64\\bin\\cmake.exe --build build && start \"ProyectoOpenGL\" cmd /k \"build\\ProyectoOpenGL.exe\""
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "group": "build",
+            "presentation": {
+                "reveal": "always",
+                "clear": true,
+                "panel": "shared"
+            },
+            "problemMatcher": ["$gcc"]
+        }
+    ]
+}

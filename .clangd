@@ -1,0 +1,9 @@
+CompileFlags:
+  Add: [
+    "-I", "C:/Users/USER/Desktop/PROGRAMACION VISUAL/proyecto-opengl/include",
+    "-isystem", "C:/msys64/ucrt64/include",
+    "-isystem", "C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++",
+    "-isystem", "C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/x86_64-w64-mingw32",
+    "-isystem", "C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/backward",
+    "--target=x86_64-w64-mingw32"
+  ]

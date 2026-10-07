@@ -1,0 +1,9 @@
+{
+    "c-cpp-compile-run.cpp-compiler": "C:\\msys64\\ucrt64\\bin\\g++.exe",
+    "c-cpp-compile-run.custom-cpp-args": "-std=c++11 -I\"c:/Users/USER/Desktop/PROGRAMACION VISUAL/proyecto-opengl/include\" -I\"C:/msys64/ucrt64/include\" -finput-charset=UTF-8 -fexec-charset=UTF-8 \"c:/Users/USER/Desktop/PROGRAMACION VISUAL/proyecto-opengl/src/escena.cpp\" \"c:/Users/USER/Desktop/PROGRAMACION VISUAL/proyecto-opengl/src/platillo.cpp\" \"c:/Users/USER/Desktop/PROGRAMACION VISUAL/proyecto-opengl/src/input.cpp\" \"c:/Users/USER/Desktop/PROGRAMACION VISUAL/proyecto-opengl/src/camara.cpp\" -L\"c:/Users/USER/Desktop/PROGRAMACION VISUAL/proyecto-opengl/lib\" -lfreeglut -lopengl32 -lglu32",
+    "c-cpp-compile-run.run-in-external-terminal": true,
+    "c-cpp-compile-run.save-before-compile": true,
+    "code-runner.executorMap": {
+        "cpp": "cd \"c:/Users/USER/Desktop/PROGRAMACION VISUAL/proyecto-opengl\" && C:\\msys64\\ucrt64\\bin\\cmake.exe -B build -G \"MinGW Makefiles\" && C:\\msys64\\ucrt64\\bin\\cmake.exe --build build && build\\ProyectoOpenGL.exe"
+    }
+}
