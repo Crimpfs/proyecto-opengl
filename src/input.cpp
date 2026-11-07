@@ -7,8 +7,7 @@ int camaraSeleccionada = 0;
 bool arrastrando    = false;
 int mouseAnteriorX  = 0;
 int mouseAnteriorY  = 0;
-//int tiempoUltimoClic  = 0;
-//int viewportUltimoClic = -1;
+
 
 int detectarCamara(int mouseX, int mouseY) {
     int yDesdeAbajo = alto - mouseY;
@@ -82,3 +81,4 @@ void moverMouse(int x, int y) {
         glutPostRedisplay();
     }
 }
+
