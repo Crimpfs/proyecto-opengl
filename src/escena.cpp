@@ -1,53 +1,78 @@
 #include "escena.h"
-#include "cajas.h"
 #include "camara.h"
 #include "platillo.h"
 #include <GL/glut.h>
 
 void inicializar() {
-  glEnable(GL_DEPTH_TEST);
-  glClearColor(0.0, 0.0, 0.0, 0.0);
+    glEnable(GL_DEPTH_TEST);
+     glEnable(GL_NORMALIZE);
+    glClearColor(0.0, 0.0, 0.0, 1.0);
+
+    // Iluminacion
+    GLfloat lightKa[] = {0.2, 0.2, 0.2, 1.0};
+    GLfloat lightKd[] = {0.8, 0.8, 0.8, 1.0};
+    GLfloat lightKs[] = {1.0, 1.0, 1.0, 1.0};
+
+    glLightfv(GL_LIGHT0, GL_AMBIENT,  lightKa);
+    glLightfv(GL_LIGHT0, GL_DIFFUSE,  lightKd);
+    glLightfv(GL_LIGHT0, GL_SPECULAR, lightKs);
+
+    GLfloat matKs[] = {1.0, 1.0, 1.0, 1.0};
+    glMaterialfv(GL_FRONT, GL_SPECULAR, matKs);
+    glMaterialf(GL_FRONT, GL_SHININESS, 60.0);
+
+    glEnable(GL_COLOR_MATERIAL);
+    glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
+
+    glEnable(GL_LIGHT0);
+    glEnable(GL_LIGHTING);
 }
 
-escena miEscenaPrincipal(0.0, 0.0, 0.0);
+escena miEscena;
 
-  
-cajas miCaja(15.0, 2.5, 15.0, 5.0, 1);
-cajas miCaja2(-15.0, 2.5, 15.0, 5.0, 3);
-cajas miCaja3(15.0, 5.0, -15.0, 10.0, 4);
-cajas miCaja4(-15.0, 2.5, -15.0, 5.0, 5);
-
-
+void dibujarFocoLuz(float x, float y, float z) {
+    glDisable(GL_LIGHTING); 
+    glPushMatrix();
+    glTranslatef(x, y, z);
+    glColor3f(1.0, 1.0, 0.2);  
+    glutSolidSphere(0.8, 20, 20);  
+    glPopMatrix();
+    glEnable(GL_LIGHTING); 
+}
 
 void graficar() {
-  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-  glMatrixMode(GL_MODELVIEW);
-  glLoadIdentity();
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); 
 
-  camara.aplicarCamara();
+    GLfloat posLuz[] = { 0.0, 25.0, 15.0, 1.0 };
 
-  miEscenaPrincipal.graficarCuadricula();
-  miEscenaPrincipal.graficarejes();
-  miCaja.dibujar();
-  miCaja2.dibujar();
-  miCaja3.dibujar();
-  miCaja4.dibujar();
+    for (int i = 0; i < 6; i++) {
+        glMatrixMode(GL_MODELVIEW);
+        glLoadIdentity(); 
+        glEnable(GL_DEPTH_TEST);
 
-  glPushMatrix();
-  glTranslatef(miNave.getX(), miNave.getY(), miNave.getZ());
-  glRotatef(-miNave.getYaw(), 0.0f, 1.0f, 0.0f);
-  glScalef(0.5f, 0.5f, 0.5f);
-  miNave.dibujar();
-  glPopMatrix();
+        dibujarVista(i); 
+        camaras[i].aplicarvista();
+        glLightfv(GL_LIGHT0, GL_POSITION, posLuz);
+        dibujarFocoLuz(posLuz[0], posLuz[1], posLuz[2]);
 
-  glPushMatrix();
-  glTranslatef(5.0f, 5.0f, 5.0f);
-  glRotatef(45.0f, 0.0f, 1.0f, 0.0f);
-  glScalef(0.5f, 0.5f, 0.5f);
-  miPlato.dibujar();
-  glPopMatrix();
+        glEnable(GL_LIGHTING);
+        for (int j = 0; j < 6; j++) {
+            if (j != i) camaras[j].dibujar();
+        }
 
-  camara.graficarHUD();
+      //glutWireTeapot(1.0);
 
-  glutSwapBuffers();
+        glPushMatrix();
+            glTranslatef(miNave.getX(), miNave.getY(), miNave.getZ());
+            glRotatef(-miNave.getYaw(), 0.0, 1.0, 0.0);
+            glScalef(0.5, 0.5, 0.5);
+            miNave.dibujar();
+        glPopMatrix();
+
+
+        glDisable(GL_LIGHTING);
+        miEscena.graficarCuadricula();
+        miEscena.graficarejes();
+    }
+    glutSwapBuffers();
 }

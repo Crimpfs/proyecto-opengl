@@ -2,22 +2,24 @@
 #include "escena.h"
 #include "input.h"
 #include "platillo.h"
-#include <GL/freeglut.h>
+#include <GL/glut.h>
 
 int main(int argc, char **argv) {
-  glutInit(&argc, argv);
-  glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
-  glutInitWindowSize(600, 400);
-  glutInitWindowPosition(100, 200);
-  glutCreateWindow("Hola Mundo");
+    glutInit(&argc, argv);
+    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
+    glutInitWindowSize(ancho, alto);
+    glutCreateWindow("Hola Mundo");
 
-  inicializar();
+    inicializar();
 
-  glutDisplayFunc(graficar);
-  glutReshapeFunc(redimensionar);
-  glutKeyboardFunc(teclasNormales);
-  glutIdleFunc(animacionNave);
-  glutMainLoop();
+    glutDisplayFunc(graficar);
+    glutReshapeFunc(redimensionar);
+    glutKeyboardFunc(teclasNormales);
+    glutSpecialFunc(flechas);
+    glutMouseFunc(clicMouse);
+    glutMotionFunc(moverMouse);
+    glutIdleFunc(animacionNave);
 
-  return 0;
+    glutMainLoop();
+    return 0;
 }
