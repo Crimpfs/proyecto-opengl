@@ -1,7 +1,15 @@
 #include "escena.h"
 #include "camara.h"
 #include "platillo.h"
+#include <GL/gl.h>
 #include <GL/glut.h>
+
+escena miEscena;
+
+void animacionescena() {
+    miNave.animar();
+    glutPostRedisplay();
+}
 
 void inicializar() {
     glEnable(GL_DEPTH_TEST);
@@ -27,9 +35,8 @@ void inicializar() {
     glEnable(GL_LIGHT0);
     glEnable(GL_LIGHTING);
 }
-
-escena miEscena;
-
+ 
+ // despues lo paso a clase xd
 void dibujarFocoLuz(float x, float y, float z) {
     glDisable(GL_LIGHTING); 
     glPushMatrix();
@@ -59,8 +66,12 @@ void graficar() {
         for (int j = 0; j < 6; j++) {
             if (j != i) camaras[j].dibujar();
         }
-
-      //glutWireTeapot(1.0);
+/*
+        glPushMatrix(); 
+        glScalef(0,2.5,0);
+        glutSolidTeapot(3.0);
+        glPopMatrix();
+*/
 
         glPushMatrix();
             glTranslatef(miNave.getX(), miNave.getY(), miNave.getZ());
@@ -69,10 +80,10 @@ void graficar() {
             miNave.dibujar();
         glPopMatrix();
 
-
         glDisable(GL_LIGHTING);
         miEscena.graficarCuadricula();
         miEscena.graficarejes();
+        //crm7
     }
     glutSwapBuffers();
 }

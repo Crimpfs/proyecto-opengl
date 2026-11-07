@@ -3,6 +3,24 @@
 #include "platillo.h"
 #include <GL/glut.h>
 
+int camaraSeleccionada = 0;
+bool arrastrando    = false;
+int mouseAnteriorX  = 0;
+int mouseAnteriorY  = 0;
+//int tiempoUltimoClic  = 0;
+//int viewportUltimoClic = -1;
+
+int detectarCamara(int mouseX, int mouseY) {
+    int yDesdeAbajo = alto - mouseY;
+    if (yDesdeAbajo >= alto / 2) {
+        return (mouseX < (ancho * 2) / 3) ? 0 : 1;
+    }
+    if (mouseX < ancho / 4) return 5;
+    if (mouseX < ancho / 2) return 4;
+    if (mouseX < (ancho * 2) / 3) return 3;
+    return 2;
+}
+
 void teclasNormales(unsigned char key, int, int) {
     if (key >= '1' && key <= '6') {
         camaraSeleccionada = key - '1';
@@ -10,7 +28,6 @@ void teclasNormales(unsigned char key, int, int) {
         return;
     }
 
-    // Mover la nave con W, A, S, D, Q, E, R, F
     switch (key) {
         case 'w': case 'W': miNave.moverAdelante(1.0f); break;
         case 's': case 'S': miNave.moverAtras(1.0f); break;
@@ -23,7 +40,6 @@ void teclasNormales(unsigned char key, int, int) {
         case 'r': case 'R': miNave.moverArriba(1.0f); break;
         case 'f': case 'F': miNave.moverAbajo(1.0f); break;
     }
-
     glutPostRedisplay();
 }
 

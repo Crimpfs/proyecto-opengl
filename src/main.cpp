@@ -18,7 +18,7 @@ int main(int argc, char **argv) {
     glutSpecialFunc(flechas);
     glutMouseFunc(clicMouse);
     glutMotionFunc(moverMouse);
-    glutIdleFunc(animacionNave);
+    glutIdleFunc(animacionescena);
 
     glutMainLoop();
     return 0;

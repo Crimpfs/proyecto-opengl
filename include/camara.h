@@ -107,15 +107,9 @@ public:
 };
 extern ViewportInfo viewportsCamaras[6];
 extern camara camaras[6];
-
 extern int ancho, alto;
-extern int camaraSeleccionada;
-extern bool arrastrando;
-extern int mouseAnteriorX, mouseAnteriorY;
-extern int tiempoUltimoClic, viewportUltimoClic;
-extern float paso;
 
-int  detectarCamara(int mouseX, int mouseY);
 void redimensionar(int w, int h);
+void dibujarVista(int i);
 
 #endif

@@ -1,6 +1,9 @@
 #include "camara.h"
 #include <GL/glut.h>
 
+int ancho = 1000;
+int alto  = 700;
+
 ViewportInfo viewportsCamaras[6];
 
 camara camaras[6] = {
@@ -12,28 +15,7 @@ camara camaras[6] = {
     camara(  0.0, 35.0,   0.1,   0.0, -88.0, 0.0)  
 };
 
-// se podria meter en clas camara 
-int ancho = 1000;
-int alto  = 700;
-int camaraSeleccionada = 0;
-bool arrastrando    = false;
-int mouseAnteriorX  = 0;
-int mouseAnteriorY  = 0;
-int tiempoUltimoClic  = 0;
-int viewportUltimoClic = -1;
-float paso = 0.5;
-
-int detectarCamara(int mouseX, int mouseY) {
-    int yDesdeAbajo = alto - mouseY;
-    if (yDesdeAbajo >= alto / 2) {
-        return (mouseX < (ancho * 2) / 3) ? 0 : 1;
-    }
-    if (mouseX < ancho / 4) return 5;
-    if (mouseX < ancho / 2) return 4;
-    if (mouseX < (ancho * 2) / 3) return 3;
-    return 2;
-}
-
+// podria añadirle a class camara
 void redimensionar(int w, int h) {
     ancho = w;
     alto  = h;

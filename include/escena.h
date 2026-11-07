@@ -3,8 +3,9 @@
 
 #include <GL/glut.h>
 
+void dibujarFocoLuz(float x, float y, float z);
+void animacionescena();
 void inicializar();
-void dibujarVista(int i);
 void graficar();
 
 class escena {

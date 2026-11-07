@@ -107,6 +107,5 @@ public:
 };
 
 extern Platillo miNave; 
-void animacionNave();
 
 #endif
