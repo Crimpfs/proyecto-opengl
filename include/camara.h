@@ -3,38 +3,29 @@
 
 #include <GL/glut.h>
 #include <cmath>
+#include "objetos.h"
 
 struct ViewportInfo {
     int x, y, w, h;
 };
 
-class camara {
+class camara : public Objeto {
 private:
-    float x, y, z;
     float yaw, pitch, roll;
 
 public:
-    camara(float x, float y, float z, float yaw, float pitch, float roll) {
-        this->x = x;
-        this->y = y;
-        this->z = z;
+    camara(float x, float y, float z, float yaw, float pitch, float roll) : Objeto(x, y, z) {
         this->yaw = yaw;
         this->pitch = pitch;
         this->roll = roll;
     }
 
     // Gets
-    float getX() const { return x; }
-    float getY() const { return y; }
-    float getZ() const { return z; }
     float getYaw() const { return yaw; }
     float getPitch() const { return pitch; }
     float getRoll() const { return roll; }
 
     // Sets
-    void setX(float x) { this->x = x; }
-    void setY(float y) { this->y = y; }
-    void setZ(float z) { this->z = z; }
     void setYaw(float yaw) { this->yaw = yaw; }
     void setPitch(float pitch) { this->pitch = pitch; }
     void setRoll(float roll) { this->roll = roll; }
@@ -72,31 +63,30 @@ public:
         glTranslatef(-x, -y, -z);     // Mueve el mundo en sentido inverso
     }
 
-    void dibujar() {
+    void dibujar() override {
         glPushMatrix();
-        glTranslatef(x, y, z);        
-        glRotatef(yaw,   0.0f, 1.0f, 0.0f); 
-        glRotatef(pitch, 1.0f, 0.0f, 0.0f); 
-        glRotatef(roll,  0.0f, 0.0f, 1.0f); 
+        glTranslatef(this->x, this->y, this->z);        
+        glRotatef(yaw,   0.0, 1.0, 0.0); 
+        glRotatef(pitch, 1.0, 0.0, 0.0); 
+        glRotatef(roll,  0.0, 0.0, 1.0); 
 
-        glColor3f(0.2f, 0.2f, 0.2f);
+        glColor3f(0.2, 0.2, 0.2);
         glPushMatrix();
-        glScalef(1.6f, 1.0f, 0.9f);
+        glScalef(1.6, 1.0, 0.9);
         glutSolidCube(1.0);
         glPopMatrix();
 
 
-        glColor3f(0.1f, 0.1f, 0.1f);
+        glColor3f(0.1, 0.1, 0.1);
         glPushMatrix();
-        glTranslatef(0.0f, 0.0f, -0.45f); 
+        glTranslatef(0.0, 0.0, -0.45); 
         
-        glRotatef(180.0f, 0.0f, 1.0f, 0.0f); 
+        glRotatef(180.0, 0.0, 1.0, 0.0); 
         GLUquadric* q = gluNewQuadric();
-        gluCylinder(q, 0.35, 0.25, 0.6, 20, 1); // Tubo del lente cónico
-        // Tapa frontal del lente (cristal del lente en la punta)
+        gluCylinder(q, 0.35, 0.25, 0.6, 20, 1); 
         glPushMatrix();
-        glTranslatef(0.0f, 0.0f, 0.6f);
-        glColor3f(0.0f, 0.5f, 0.8f); 
+        glTranslatef(0.0, 0.0, 0.6);
+        glColor3f(0.0, 0.5, 0.8); 
         gluDisk(q, 0.0, 0.25, 20, 1);
         glPopMatrix();
         gluDeleteQuadric(q);

@@ -13,51 +13,92 @@ int mouseAnteriorY  = 0;
 //int tiempoUltimoClic  = 0;
 //int viewportUltimoClic = -1;
 
-
-int detectarCamara(int mouseX, int mouseY) {
-    int yDesdeAbajo = alto - mouseY;
-    if (yDesdeAbajo >= alto / 2) {
-        return (mouseX < (ancho * 2) / 3) ? 0 : 1;
-    }
-    if (mouseX < ancho / 4) return 5;
-    if (mouseX < ancho / 2) return 4;
-    if (mouseX < (ancho * 2) / 3) return 3;
-    return 2;
-}
-
 // ========================================================
-// 1. CLASE PLATILLO 
+// 0. CLASE BASE - padre
 // ========================================================
-class Platillo {
-private:
+class Objeto {
+protected:
     float x, y, z;
+public:
+    Objeto(float x, float y, float z){
+        this->x = x;
+        this->y = y;
+        this->z = z;
+    }
+
+        virtual ~Objeto() {} 
+
+    //gets
+    float getX() const { return x; }
+    float getY() const { return y; }
+    float getZ() const { return z; }
+
+    //sets 
+    void setX(float x) { this->x = x; }
+    void setY(float y) { this->y = y; }
+    void setZ(float z) { this->z = z; }
+
+    virtual void dibujar() = 0; 
+    virtual void animar() {} 
+};
+
+// ========================================================
+// 1. CLASE SOL - hijo
+// ========================================================
+class Sol : public Objeto{
+private:
+    float radio;
+
+public:
+    Sol(float x, float y, float z, float radio) : Objeto(x, y, z) {
+        this->radio = radio;
+    };
+
+    // Gets
+    float getRadio() const { return this->radio; }
+    // Sets
+    void setRadio(float radio) { this->radio = radio; }
+
+    void posicionarLuz() {
+        GLfloat posLuz[] = { this->x, this->y, this->z, 1.0f };
+        glLightfv(GL_LIGHT0, GL_POSITION, posLuz);
+    }
+
+    void dibujar() override {
+        glDisable(GL_LIGHTING); 
+        glPushMatrix();
+        glTranslatef(this->x, this->y, this->z);
+        glColor3f(1.0, 1.0, 0.0);
+        glutSolidSphere(this->radio, 30, 30);
+        glPopMatrix();
+        glEnable(GL_LIGHTING);  
+    }
+};
+
+
+// ========================================================
+// 1. CLASE PLATILLO - hijo
+// ========================================================
+class Platillo : public Objeto {
+private:
     float yaw;
     float anguloBase;
 
 public:
-    Platillo(float x, float y, float z, float yaw, float anguloBase) {
-        this->x = x;
-        this->y = y;
-        this->z = z;
+    Platillo(float x, float y, float z, float yaw, float anguloBase) :Objeto(x, y, z){
         this->yaw = yaw;
         this->anguloBase = anguloBase;
     }
 
     // Getters
-    float getX() const { return this->x; }
-    float getY() const { return this->y; }
-    float getZ() const { return this->z; }
     float getYaw() const { return this->yaw; }
     float getAnguloBase() const { return this->anguloBase; }
 
+    //sets
+    void setYaw(float yaw) { this->yaw = yaw; }
+    void setAnguloBase(float anguloBase) { this->anguloBase = anguloBase; }
+
     // Metodos de movimiento y rotacion
-    void animar() {
-        this->anguloBase += 0.5;
-        if (this->anguloBase >= 360.0)
-            this->anguloBase -= 360.0;
-
-    }
-
     void moverAdelante(float distancia) {
         x += sin(yaw * 3.14159265 / 180.0) * distancia;
         z -= cos(yaw * 3.14159265 / 180.0) * distancia;
@@ -90,7 +131,14 @@ public:
         yaw += grados; 
     }
 
-    void dibujar() {
+    void animar() override {
+        this->anguloBase += 0.5;
+        if (this->anguloBase >= 360.0)
+            this->anguloBase -= 360.0;
+
+    }
+
+    void dibujar() override {
         // Base
         glPushMatrix();
         glRotatef(anguloBase, 0.0, 1.0, 0.0);
@@ -128,44 +176,26 @@ public:
     }
 };
 
-Platillo miNave(0.0, 0.0, 0.0, 0.0, 0.0);
-
-
-void actualizarEscena() {
-    miNave.animar();
-    glutPostRedisplay();
-}
-
 // ========================================================
-// 2. CLASE CAMARA 
+// 2. CLASE CAMARA - hijo
 // ========================================================
-class camara {
+class camara : public Objeto {
 private:
-    float x, y, z;
     float yaw, pitch, roll;
 
 public:
-    camara(float x, float y, float z, float yaw, float pitch, float roll) {
-        this->x = x;
-        this->y = y;
-        this->z = z;
+    camara(float x, float y, float z, float yaw, float pitch, float roll) :Objeto(x, y, z){
         this->yaw = yaw;
         this->pitch = pitch;
         this->roll = roll;
     }
 
     // Gets
-    float getX() const { return x; }
-    float getY() const { return y; }
-    float getZ() const { return z; }
     float getYaw() const { return yaw; }
     float getPitch() const { return pitch; }
     float getRoll() const { return roll; }
 
     // Sets
-    void setX(float x) { this->x = x; }
-    void setY(float y) { this->y = y; }
-    void setZ(float z) { this->z = z; }
     void setYaw(float yaw) { this->yaw = yaw; }
     void setPitch(float pitch) { this->pitch = pitch; }
     void setRoll(float roll) { this->roll = roll; }
@@ -204,12 +234,12 @@ public:
         glTranslatef(-x, -y, -z);     // Mueve el mundo en sentido inverso
     }
 
-    void dibujar() {
+    void dibujar() override {
         glPushMatrix();
         glTranslatef(x, y, z);        
-        glRotatef(yaw,   0.0f, 1.0f, 0.0f); 
-        glRotatef(pitch, 1.0f, 0.0f, 0.0f); 
-        glRotatef(roll,  0.0f, 0.0f, 1.0f); 
+        glRotatef(yaw,   0.0, 1.0, 0.0); 
+        glRotatef(pitch, 1.0, 0.0, 0.0); 
+        glRotatef(roll,  0.0, 0.0, 1.0); 
 
         glColor3f(0.2f, 0.2f, 0.2f);
         glPushMatrix();
@@ -229,24 +259,6 @@ public:
         glPopMatrix();
     }
 };
-
-struct ViewportInfo {
-    int x, y, w, h;
-};
-
-ViewportInfo viewportsCamaras[6];
-
-camara camaras[6] = {
-    camara( 20.0, 15.0,  30.0,  33.0, -22.0, 0.0), 
-    camara( 25.0,  5.0,   0.0,  90.0, -10.0, 0.0), 
-    camara(  0.0,  5.0,  25.0,   0.0, -10.0, 0.0), 
-    camara(-25.0,  5.0,   0.0, -90.0, -10.0, 0.0), 
-    camara(  0.0,  5.0, -25.0, 180.0, -10.0, 0.0), 
-    camara(  0.0, 35.0,   0.1,   0.0, -88.0, 0.0)  
-};
-
-
-
 
 // ========================================================
 // 3. CLASE ESCENA 
@@ -308,8 +320,35 @@ public:
     }
 };
 
-escena miEscena;
+//0=======================================================
+// ESTABLECER ESCENA 
+//========================================================
 
+escena miEscena;
+Platillo miNave(0.0, 0.0, 0.0, 0.0, 0.0);
+Sol miSol(0.0, 25.0, 15.0, 5.0); 
+
+struct ViewportInfo {
+    int x, y, w, h;
+};
+
+ViewportInfo viewportsCamaras[6];
+
+camara camaras[6] = {
+    camara( 20.0, 15.0,  30.0,  33.0, -22.0, 0.0), 
+    camara( 25.0,  5.0,   0.0,  90.0, -10.0, 0.0), 
+    camara(  0.0,  5.0,  25.0,   0.0, -10.0, 0.0), 
+    camara(-25.0,  5.0,   0.0, -90.0, -10.0, 0.0), 
+    camara(  0.0,  5.0, -25.0, 180.0, -10.0, 0.0), 
+    camara(  0.0, 35.0,   0.1,   0.0, -88.0, 0.0)  
+};
+
+
+void actualizarEscena() {
+    miNave.animar();
+    glutPostRedisplay();
+}
+//lo pude hacer class tambienxd
 void dibujarFocoLuz(float x, float y, float z) {
     glDisable(GL_LIGHTING);
     glPushMatrix();
@@ -374,7 +413,6 @@ void inicializar() {
 
 void graficar() {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); 
-    GLfloat posLuz[] = { 0.0f, 25.0f, 15.0f, 1.0f };
 
     for (int i = 0; i < 6; i++) {
         glMatrixMode(GL_MODELVIEW);
@@ -383,8 +421,8 @@ void graficar() {
 
         dibujarVista(i); 
         camaras[i].aplicarvista();
-        glLightfv(GL_LIGHT0, GL_POSITION, posLuz);
-        dibujarFocoLuz(posLuz[0], posLuz[1], posLuz[2]);
+        miSol.posicionarLuz();
+        miSol.dibujar();
 
         glEnable(GL_LIGHTING);
         for (int j = 0; j < 6; j++) {
@@ -409,6 +447,18 @@ void graficar() {
 // ========================================================
 // 4. INPUT 
 // ========================================================
+
+int detectarCamara(int mouseX, int mouseY) {
+    int yDesdeAbajo = alto - mouseY;
+    if (yDesdeAbajo >= alto / 2) {
+        return (mouseX < (ancho * 2) / 3) ? 0 : 1;
+    }
+    if (mouseX < ancho / 4) return 5;
+    if (mouseX < ancho / 2) return 4;
+    if (mouseX < (ancho * 2) / 3) return 3;
+    return 2;
+}
+
 void teclasNormales(unsigned char key, int, int) {
     if (key >= '1' && key <= '6') {
         camaraSeleccionada = key - '1';
@@ -469,6 +519,8 @@ void moverMouse(int x, int y) {
         glutPostRedisplay();
     }
 }
+
+
 
 int main(int argc, char **argv) {
     glutInit(&argc, argv);

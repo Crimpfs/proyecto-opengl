@@ -2,6 +2,7 @@
 #define ESCENA_H
 
 #include <GL/glut.h>
+#include "sol.h"
 
 void dibujarFocoLuz(float x, float y, float z);
 void animacionescena();
@@ -66,5 +67,5 @@ public:
 };
 
 extern escena miEscena;
-
+extern Sol miSol;
 #endif

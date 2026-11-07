@@ -2,6 +2,7 @@
 #include "escena.h"
 #include "input.h"
 #include "platillo.h"
+#include "sol.h"
 #include <GL/glut.h>
 
 int main(int argc, char **argv) {

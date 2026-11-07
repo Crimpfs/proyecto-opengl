@@ -1,41 +1,33 @@
 #ifndef PLATILLO_H
 #define PLATILLO_H
 
+#include "objetos.h" 
 #include <GL/glut.h>
 #include <cmath>
 #include <iostream>
 
 using namespace std;
 
-class Platillo {
+class Platillo : public Objeto {
 private:
-    float x, y, z;
     float yaw;
     float anguloBase;
 
 public:
-    Platillo(float x, float y, float z, float yaw, float anguloBase) {
-        this->x = x;
-        this->y = y;
-        this->z = z;
+    Platillo(float x, float y, float z, float yaw, float anguloBase) : Objeto(x, y, z) {
         this->yaw = yaw;
         this->anguloBase = anguloBase;
     }
 
     // Getters
-    float getX() const { return this->x; }
-    float getY() const { return this->y; }
-    float getZ() const { return this->z; }
     float getYaw() const { return this->yaw; }
     float getAnguloBase() const { return this->anguloBase; }
 
-    // Metodos de movimiento y rotacion
-    void animar() {
-        this->anguloBase += 0.5;
-        if (this->anguloBase >= 360.0)
-            this->anguloBase -= 360.0;
-    }
+    //sets
+    void setYaw(float yaw) { this->yaw = yaw; }
+    void setAnguloBase(float anguloBase) { this->anguloBase = anguloBase; }
 
+    // Metodos de movimiento y rotacion
     void moverAdelante(float distancia) {
         x += sin(yaw * 3.14159265 / 180.0) * distancia;
         z -= cos(yaw * 3.14159265 / 180.0) * distancia;
@@ -68,7 +60,13 @@ public:
         yaw += grados; 
     }
 
-    void dibujar() {
+    void animar() override {
+        this->anguloBase += 0.5;
+        if (this->anguloBase >= 360.0)
+            this->anguloBase -= 360.0;
+    }
+
+    void dibujar() override {
         // Base
         glPushMatrix();
         glRotatef(anguloBase, 0.0, 1.0, 0.0);
